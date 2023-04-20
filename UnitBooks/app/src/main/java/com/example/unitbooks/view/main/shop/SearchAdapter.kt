@@ -4,33 +4,32 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.unitbooks.R
 import com.example.unitbooks.databinding.CatalogItemBinding
 import com.example.unitbooks.model.BookItem
 
-class CatalogAdapter() :
-    PagingDataAdapter<BookItem, CatalogAdapter.CatalogViewHolder>(DiffUtilCallback) {
+class SearchAdapter :
+    PagingDataAdapter<BookItem, SearchAdapter.SearchViewHolder>(diffCallback = DiffUtilCallback) {
 
     private lateinit var clickListener: ClickListener
 
-    inner class CatalogViewHolder(
-        val binding: CatalogItemBinding, listener: ClickListener
-    ) : RecyclerView.ViewHolder(binding.root) {
+    inner class SearchViewHolder(val binding: CatalogItemBinding, clickListener: ClickListener) :
+        ViewHolder(binding.root) {
 
         init {
             itemView.let {
                 it.setOnClickListener {
-                    listener.onItemClick(
+                    clickListener.onItemClick(
                         getItem(bindingAdapterPosition)!!, bindingAdapterPosition
                     )
                 }
             }
         }
 
-        fun bind(bookDetailsElement: BookItem) {
-            val volumeInfo = bookDetailsElement.volumeInfo
+        fun bind(bookItem: BookItem) {
+            val volumeInfo = bookItem.volumeInfo
             binding.tvBookTitle.text = volumeInfo.title
 
             volumeInfo.imageLinks?.thumbnail?.let {
@@ -38,28 +37,29 @@ class CatalogAdapter() :
             } ?: Glide.with(itemView).load(R.drawable.r)
                 .into(binding.ivImage)
         }
+
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatalogViewHolder {
-        return CatalogViewHolder(
-            CatalogItemBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            ), clickListener
-        )
-    }
-
-    override fun onBindViewHolder(holder: CatalogViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         val bookItem = getItem(position)!!
         holder.bind(bookItem)
         holder.setIsRecyclable(false)
     }
 
-    interface ClickListener {
-        fun onItemClick(volumeInfoElement: BookItem, position: Int)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
+        return SearchViewHolder(
+            CatalogItemBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false,
+            ), clickListener
+        )
     }
 
     fun setClickListener(listener: ClickListener) {
-        clickListener = listener
+        this.clickListener = listener
+    }
+
+    interface ClickListener {
+        fun onItemClick(bookItem: BookItem, position: Int)
     }
 
     object DiffUtilCallback : DiffUtil.ItemCallback<BookItem>() {
@@ -70,7 +70,9 @@ class CatalogAdapter() :
         override fun areContentsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {
             return oldItem == newItem
         }
-
     }
 }
+
+
+
 

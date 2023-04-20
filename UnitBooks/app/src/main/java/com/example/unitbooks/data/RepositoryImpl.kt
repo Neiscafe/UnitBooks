@@ -11,7 +11,8 @@ import com.example.unitbooks.network.BookService
 
 class RepositoryImpl(
     private val remote: BookService,
-    private val pagingSource: CatalogPagingSource
+    private val catalogSource: CatalogPagingSource,
+    private val searchSource: SearchPagingSource
 ) : Repository {
 
 
@@ -19,12 +20,19 @@ class RepositoryImpl(
         return remote.getVolumes(0)
     }
 
-    override fun getPagingVolumes(): LiveData<PagingData<BookItem>> {
-        return Pager(PagingConfig(pageSize = 40)) { pagingSource }.liveData
+    override suspend fun getPagingVolumes(): LiveData<PagingData<BookItem>> {
+        return Pager(PagingConfig(pageSize = 40)) { catalogSource }.liveData
+    }
+
+    override fun getPagingVolumesFiltered(query: String): LiveData<PagingData<BookItem>> {
+        searchSource.setQuery(query)
+        val pager = Pager(PagingConfig(pageSize = 40)) { searchSource }
+        return pager.liveData
     }
 }
 
 interface Repository {
     suspend fun getVolumes(): BookResponse
-    fun getPagingVolumes(): LiveData<PagingData<BookItem>>
+    suspend fun getPagingVolumes(): LiveData<PagingData<BookItem>>
+    fun getPagingVolumesFiltered(query: String): LiveData<PagingData<BookItem>>
 }

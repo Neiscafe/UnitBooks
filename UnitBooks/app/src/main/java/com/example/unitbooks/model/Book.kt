@@ -27,7 +27,7 @@ data class BookInfo(
     val language: String
 )
 
-data class BookImage (
+data class BookImage(
     val thumbnail: String,
     val smallThumbnail: String
 )

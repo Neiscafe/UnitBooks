@@ -19,6 +19,15 @@
         android:name="com.example.unitbooks.view.main.shop.ShopFragment"
         android:label="fragment_shop"
         tools:layout="@layout/fragment_shop" >
+        <action
+            android:id="@+id/action_shopFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_shopFragment_to_accountFragment"
+            app:destination="@id/accountFragment" />
+        <action
+            android:id="@+id/action_shopFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
     </fragment>
 
     <fragment
@@ -26,4 +35,9 @@
         android:name="com.example.unitbooks.view.main.account.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.unitbooks.view.main.shop.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 </navigation>
