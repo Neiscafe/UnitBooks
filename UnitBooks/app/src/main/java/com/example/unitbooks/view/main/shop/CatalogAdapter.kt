@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.unitbooks.R
 import com.example.unitbooks.databinding.CatalogItemBinding
 import com.example.unitbooks.model.BookItem
+import com.example.unitbooks.util.getBookPrice
 
 class CatalogAdapter() :
     PagingDataAdapter<BookItem, CatalogAdapter.CatalogViewHolder>(DiffUtilCallback) {
@@ -32,8 +33,9 @@ class CatalogAdapter() :
         fun bind(bookDetailsElement: BookItem) {
             val volumeInfo = bookDetailsElement.volumeInfo
             binding.tvBookTitle.text = volumeInfo.title
+            binding.tvBookPrice.text = getBookPrice()
 
-            volumeInfo.imageLinks?.thumbnail?.let {
+            volumeInfo.imageLinks?.smallThumbnail?.let {
                 Glide.with(itemView).load(it).into(binding.ivImage)
             } ?: Glide.with(itemView).load(R.drawable.r)
                 .into(binding.ivImage)
@@ -64,7 +66,7 @@ class CatalogAdapter() :
 
     object DiffUtilCallback : DiffUtil.ItemCallback<BookItem>() {
         override fun areItemsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.apiId == newItem.apiId
         }
 
         override fun areContentsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {

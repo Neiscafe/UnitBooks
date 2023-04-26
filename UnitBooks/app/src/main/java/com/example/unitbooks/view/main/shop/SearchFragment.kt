@@ -39,7 +39,7 @@ class SearchFragment : Fragment() {
         searchAdapter = SearchAdapter()
         svSearchView = binding.svSearchview
         rvSearch.adapter = searchAdapter
-        rvSearch.layoutManager = GridLayoutManager(requireContext(), 4)
+        rvSearch.layoutManager = GridLayoutManager(requireContext(), 3)
         searchAdapter.setClickListener(object : SearchAdapter.ClickListener {
             override fun onItemClick(bookItem: BookItem, position: Int) {
                 Toast.makeText(requireContext(), "${bookItem.volumeInfo.title}", Toast.LENGTH_SHORT)

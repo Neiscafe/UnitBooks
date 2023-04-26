@@ -1,6 +1,5 @@
 package com.example.unitbooks.view.main.shop
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,12 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
-import androidx.paging.map
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import com.example.unitbooks.R
 import com.example.unitbooks.databinding.FragmentShopBinding
 import com.example.unitbooks.model.BookItem
@@ -31,10 +29,10 @@ class ShopFragment : Fragment() {
     private val binding: FragmentShopBinding get() = _binding!!
     private val viewModel by viewModel<ShopViewModel>()
     private lateinit var rvCatalog: RecyclerView
+    private lateinit var rvHotDeals: RecyclerView
     private lateinit var svSearchView: SearchView
     private lateinit var catalogAdapter: CatalogAdapter
-    private val tvHotDeals by lazy { binding.tvHotDeals }
-    private val tvTrending by lazy { binding.tvTrending }
+    private lateinit var hotDealsAdapter: HotDealsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -45,8 +43,8 @@ class ShopFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        setupScreen()
         setupViewModelObserver()
+
     }
 
     override fun onResume() {
@@ -57,19 +55,45 @@ class ShopFragment : Fragment() {
     private fun setupViewModelObserver() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.getPagingBooks().observe(viewLifecycleOwner) {
-                    catalogAdapter.submitData(lifecycle, it)
-                }
+                hotDealsData()
+                catalogData()
             }
+        }
+    }
+
+    private suspend fun hotDealsData() {
+        viewModel.getHotDeals().observe(viewLifecycleOwner) {
+            hotDealsAdapter.append(it.items)
+        }
+    }
+
+    private suspend fun catalogData() {
+        viewModel.getPagingBooks().observe(viewLifecycleOwner) {
+            catalogAdapter.submitData(lifecycle, it)
         }
     }
 
     private fun setupScreen() {
         svSearchView = binding.svSearchviewCatalog
+
         rvCatalog = binding.rvCatalog
+        rvHotDeals = binding.rvHotDeals
+
         catalogAdapter = CatalogAdapter()
+        hotDealsAdapter = HotDealsAdapter()
+
+        rvHotDeals.adapter = hotDealsAdapter
         rvCatalog.adapter = catalogAdapter
-        rvCatalog.layoutManager = GridLayoutManager(requireContext(), 4)
+
+        rvCatalog.layoutManager = GridLayoutManager(requireContext(), 3)
+        rvHotDeals.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+
+        hotDealsAdapter.setOnClickListener(object : HotDealsAdapter.ClickListener {
+            override fun onItemClick(position: Int, book: BookItem) {
+                Toast.makeText(requireContext(), "Clique ativado", Toast.LENGTH_SHORT).show()
+            }
+        })
+
         catalogAdapter.setClickListener(object : CatalogAdapter.ClickListener {
             override fun onItemClick(volumeInfoElement: BookItem, position: Int) {
                 Toast.makeText(requireContext(), "Clique ativado", Toast.LENGTH_SHORT).show()

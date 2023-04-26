@@ -23,6 +23,11 @@ interface BookService {
         @Query(value = "maxResults") maxResults: Int = 40
     ): BookResponse
 
+    @GET("volumes?q=search+terms")
+    suspend fun getHotDeals(
+        @Query(value = "startIndex") startIndex: Int = 0,
+        @Query(value = "maxResults") maxResults: Int = 20
+    ): BookResponse
 //    @GET("volumes?q=search+terms")
 //    suspend fun getPagingVolumes(
 //        @Query(value = "startIndex") startIndex: Int,

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.main.shop.description.BookFragment"
+    android:layout_marginHorizontal="15dp"
+    android:layout_marginVertical="10dp">
+
+    <ImageView
+        android:id="@+id/iv_book_image"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        tools:src="@tools:sample/backgrounds/scenic"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        style="@style/TitleTextStyle"
+        android:id="@+id/tv_book_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart"
+        android:textColor="@color/yellow_primary_variant"
+        tools:text = "Titulo do livro"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_book_image"/>
+
+    <TextView
+        style="@style/SecondaryTitleTextStyle"
+        android:id="@+id/tv_book_author"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        tools:text = "Autor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_book_title"/>
+
+    <TextView
+        style="@style/SecondaryTitleTextStyle"
+        android:id="@+id/tv_book_resume"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:maxLines="9"
+        android:textColor="@color/gray_strong_variant"
+        tools:text = "@tools:sample/lorem/random"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_book_author"/>
+    <TextView
+        style="@style/TitleTextStyle"
+        android:id="@+id/tv_book_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/green_tertiary"
+        tools:text = "$200.00"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_book_resume"/>
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/ButtonStyle"
+        android:id="@+id/bt_purchase_item"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/purchase_item"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_book_price"/>
+
+    <TextView
+        style="@style/SecondaryTitleTextStyle"
+        android:id="@+id/tv_add_to_cart"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textAlignment="center"
+        tools:text = "add to cart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_purchase_item"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

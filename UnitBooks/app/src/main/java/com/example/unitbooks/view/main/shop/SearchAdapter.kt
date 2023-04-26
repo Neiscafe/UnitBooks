@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.unitbooks.R
 import com.example.unitbooks.databinding.CatalogItemBinding
 import com.example.unitbooks.model.BookItem
+import com.example.unitbooks.util.getBookPrice
 
 class SearchAdapter :
     PagingDataAdapter<BookItem, SearchAdapter.SearchViewHolder>(diffCallback = DiffUtilCallback) {
@@ -21,9 +22,7 @@ class SearchAdapter :
         init {
             itemView.let {
                 it.setOnClickListener {
-                    clickListener.onItemClick(
-                        getItem(bindingAdapterPosition)!!, bindingAdapterPosition
-                    )
+                    clickListener.onItemClick(getItem(bindingAdapterPosition)!!, bindingAdapterPosition)
                 }
             }
         }
@@ -31,6 +30,7 @@ class SearchAdapter :
         fun bind(bookItem: BookItem) {
             val volumeInfo = bookItem.volumeInfo
             binding.tvBookTitle.text = volumeInfo.title
+            binding.tvBookPrice.text = getBookPrice()
 
             volumeInfo.imageLinks?.thumbnail?.let {
                 Glide.with(itemView).load(it).into(binding.ivImage)
@@ -64,7 +64,7 @@ class SearchAdapter :
 
     object DiffUtilCallback : DiffUtil.ItemCallback<BookItem>() {
         override fun areItemsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.apiId == newItem.apiId
         }
 
         override fun areContentsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {

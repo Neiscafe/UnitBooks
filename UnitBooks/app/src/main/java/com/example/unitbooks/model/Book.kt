@@ -1,14 +1,20 @@
 package com.example.unitbooks.model
 
+import androidx.room.Entity
+import com.google.gson.annotations.SerializedName
+import java.util.UUID
+
 data class BookResponse (
     val kind: String,
     val totalItems: Int,
     val items: List<BookItem>
         )
 
+@Entity
 data class BookItem(
+    val dbId: String = UUID.randomUUID().toString(),
     val kind: String,
-    val id: String,
+    @SerializedName("id") val apiId: String,
     val etag: String,
     val selfLink: String,
     val volumeInfo: BookInfo

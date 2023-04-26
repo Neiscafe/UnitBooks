@@ -1,6 +1,7 @@
 package com.example.unitbooks.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -29,10 +30,18 @@ class RepositoryImpl(
         val pager = Pager(PagingConfig(pageSize = 40)) { searchSource }
         return pager.liveData
     }
+
+    override suspend fun getHotDeals(): LiveData<BookResponse> {
+        val liveData = MutableLiveData<BookResponse>()
+        liveData.value = remote.getHotDeals(0, 20)
+        return liveData
+    }
 }
 
 interface Repository {
     suspend fun getVolumes(): BookResponse
     suspend fun getPagingVolumes(): LiveData<PagingData<BookItem>>
     fun getPagingVolumesFiltered(query: String): LiveData<PagingData<BookItem>>
+
+    suspend fun getHotDeals(): LiveData<BookResponse>
 }

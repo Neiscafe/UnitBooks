@@ -8,21 +8,19 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.unitbooks.data.Repository
 import com.example.unitbooks.model.BookItem
+import com.example.unitbooks.model.BookResponse
 
 class ShopViewModel(
     val repository: Repository
 ) : ViewModel() {
 
-    private val _booksResponse = MutableLiveData<PagingData<BookItem>>()
-    val booksResponse: LiveData<PagingData<BookItem>> get() = _booksResponse
-
-    private val _loading = MutableLiveData<Boolean>()
-    val loading: MutableLiveData<Boolean> = _loading
-
     suspend fun getPagingBooks(): LiveData<PagingData<BookItem>> {
         val response = repository.getPagingVolumes().cachedIn(viewModelScope)
-        _booksResponse.value = response.value
         return response
+    }
+
+    suspend fun getHotDeals(): LiveData<BookResponse>{
+        return repository.getHotDeals()
     }
 
 }

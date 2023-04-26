@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.UnitBooks" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.UnitBooks" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -12,5 +12,39 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="TitleTextStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/brown_secondary_dark</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="SecondaryActionTextStyle">
+        <item name="android:textColor">@color/yellow_primary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
+
+    <style name="SecondaryTitleTextStyle">
+        <item name="android:textColor">@color/brown_secondary_dark</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name = "android:layout_margin">5dp</item>
+    </style>
+
+    <style name="BookCardStyle">
+        <item name="cardBackgroundColor">@color/gray_item_background</item>
+        <item name="cardElevation">10dp</item>
+        <item name="cardCornerRadius">5dp</item>
+    </style>
+
+    <style name="ButtonStyle">
+        <item name="cornerRadius">20dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:backgroundTint">@color/yellow_primary</item>
+        <item name="android:paddingTop">7.5dp</item>
+        <item name="android:paddingBottom">7.5dp</item>
     </style>
 </resources>
