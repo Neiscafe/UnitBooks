@@ -1,4 +1,4 @@
-package com.example.unitbooks.view.main.shop
+package com.example.unitbooks.view.main.shop.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.unitbooks.databinding.FragmentSearchBinding
-import com.example.unitbooks.model.BookItem
+import com.example.unitbooks.model.Book
+import com.example.unitbooks.model.BookEntity
+import com.example.unitbooks.view.main.shop.adapter.SearchAdapter
+import com.example.unitbooks.view.main.shop.viewmodel.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -41,8 +44,8 @@ class SearchFragment : Fragment() {
         rvSearch.adapter = searchAdapter
         rvSearch.layoutManager = GridLayoutManager(requireContext(), 3)
         searchAdapter.setClickListener(object : SearchAdapter.ClickListener {
-            override fun onItemClick(bookItem: BookItem, position: Int) {
-                Toast.makeText(requireContext(), "${bookItem.volumeInfo.title}", Toast.LENGTH_SHORT)
+            override fun onItemClick(book: Book, position: Int) {
+                Toast.makeText(requireContext(), "${book.title}", Toast.LENGTH_SHORT)
                     .show()
             }
         })

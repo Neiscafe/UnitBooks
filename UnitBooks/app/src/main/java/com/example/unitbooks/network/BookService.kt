@@ -1,10 +1,6 @@
 package com.example.unitbooks.network
 
-import androidx.lifecycle.LiveData
-import androidx.paging.PagingData
-import com.example.unitbooks.model.BookItem
 import com.example.unitbooks.model.BookResponse
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 

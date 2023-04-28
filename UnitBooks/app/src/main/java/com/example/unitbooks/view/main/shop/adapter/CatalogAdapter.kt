@@ -1,4 +1,4 @@
-package com.example.unitbooks.view.main.shop
+package com.example.unitbooks.view.main.shop.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.unitbooks.R
 import com.example.unitbooks.databinding.CatalogItemBinding
-import com.example.unitbooks.model.BookItem
+import com.example.unitbooks.model.Book
 import com.example.unitbooks.util.getBookPrice
 
 class CatalogAdapter() :
-    PagingDataAdapter<BookItem, CatalogAdapter.CatalogViewHolder>(DiffUtilCallback) {
+    PagingDataAdapter<Book, CatalogAdapter.CatalogViewHolder>(DiffUtilCallback) {
 
     private lateinit var clickListener: ClickListener
 
@@ -30,15 +30,17 @@ class CatalogAdapter() :
             }
         }
 
-        fun bind(bookDetailsElement: BookItem) {
-            val volumeInfo = bookDetailsElement.volumeInfo
-            binding.tvBookTitle.text = volumeInfo.title
+        fun bind(item: Book) {
+            binding.tvBookTitle.text = item.title
             binding.tvBookPrice.text = getBookPrice()
 
-            volumeInfo.imageLinks?.smallThumbnail?.let {
-                Glide.with(itemView).load(it).into(binding.ivImage)
-            } ?: Glide.with(itemView).load(R.drawable.r)
-                .into(binding.ivImage)
+            item.thumbnail.let {
+                if (it.isBlank()) {
+                    Glide.with(itemView).load(R.drawable.r).into(binding.ivImage)
+                } else {
+                    Glide.with(itemView).load(it).into(binding.ivImage)
+                }
+            }
         }
     }
 
@@ -51,25 +53,25 @@ class CatalogAdapter() :
     }
 
     override fun onBindViewHolder(holder: CatalogViewHolder, position: Int) {
-        val bookItem = getItem(position)!!
-        holder.bind(bookItem)
+        val item = getItem(position)!!
+        holder.bind(item)
         holder.setIsRecyclable(false)
     }
 
     interface ClickListener {
-        fun onItemClick(volumeInfoElement: BookItem, position: Int)
+        fun onItemClick(book: Book, position: Int)
     }
 
     fun setClickListener(listener: ClickListener) {
         clickListener = listener
     }
 
-    object DiffUtilCallback : DiffUtil.ItemCallback<BookItem>() {
-        override fun areItemsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {
-            return oldItem.apiId == newItem.apiId
+    object DiffUtilCallback : DiffUtil.ItemCallback<Book>() {
+        override fun areItemsTheSame(oldItem: Book, newItem: Book): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: BookItem, newItem: BookItem): Boolean {
+        override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
             return oldItem == newItem
         }
 

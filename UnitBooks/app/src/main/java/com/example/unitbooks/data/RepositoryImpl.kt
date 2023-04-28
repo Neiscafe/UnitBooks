@@ -6,42 +6,63 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
-import com.example.unitbooks.model.BookItem
-import com.example.unitbooks.model.BookResponse
+import com.example.unitbooks.database.BookDao
+import com.example.unitbooks.model.Book
+import com.example.unitbooks.model.BookEntity
 import com.example.unitbooks.network.BookService
+import com.example.unitbooks.util.NetworkBookMapper
 
 class RepositoryImpl(
     private val remote: BookService,
     private val catalogSource: CatalogPagingSource,
-    private val searchSource: SearchPagingSource
+    private val searchSource: SearchPagingSource,
+    private val bookDao: BookDao
 ) : Repository {
 
 
-    override suspend fun getVolumes(): BookResponse {
-        return remote.getVolumes(0)
-    }
-
-    override suspend fun getPagingVolumes(): LiveData<PagingData<BookItem>> {
+    override suspend fun getPagingVolumesApi(): LiveData<PagingData<Book>> {
         return Pager(PagingConfig(pageSize = 40)) { catalogSource }.liveData
     }
 
-    override fun getPagingVolumesFiltered(query: String): LiveData<PagingData<BookItem>> {
+    override fun getPagingVolumesFilteredApi(query: String): LiveData<PagingData<Book>> {
         searchSource.setQuery(query)
         val pager = Pager(PagingConfig(pageSize = 40)) { searchSource }
         return pager.liveData
     }
 
-    override suspend fun getHotDeals(): LiveData<BookResponse> {
-        val liveData = MutableLiveData<BookResponse>()
-        liveData.value = remote.getHotDeals(0, 20)
+    override suspend fun getHotDealsApi(): LiveData<List<Book>> {
+        val liveData = MutableLiveData<List<Book>>()
+        val mappedData = NetworkBookMapper().fromEntityList(remote.getHotDeals(0, 20).items)
+        liveData.value = mappedData
         return liveData
+    }
+
+    override suspend fun insertBooksDb() {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateBooksDb() {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteBooksdb() {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAllBooksDb() {
+        TODO("Not yet implemented")
     }
 }
 
 interface Repository {
-    suspend fun getVolumes(): BookResponse
-    suspend fun getPagingVolumes(): LiveData<PagingData<BookItem>>
-    fun getPagingVolumesFiltered(query: String): LiveData<PagingData<BookItem>>
+    suspend fun getPagingVolumesApi(): LiveData<PagingData<Book>>
+    fun getPagingVolumesFilteredApi(query: String): LiveData<PagingData<Book>>
 
-    suspend fun getHotDeals(): LiveData<BookResponse>
+    suspend fun getHotDealsApi(): LiveData<List<Book>>
+
+    suspend fun insertBooksDb()
+
+    suspend fun updateBooksDb()
+    suspend fun deleteBooksdb()
+    fun getAllBooksDb()
 }

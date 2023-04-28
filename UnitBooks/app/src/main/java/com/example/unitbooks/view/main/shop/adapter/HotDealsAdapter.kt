@@ -1,21 +1,19 @@
-package com.example.unitbooks.view.main.shop
+package com.example.unitbooks.view.main.shop.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.unitbooks.R
 import com.example.unitbooks.databinding.HotDealsItemBinding
-import com.example.unitbooks.model.BookItem
-import com.example.unitbooks.model.BookResponse
+import com.example.unitbooks.model.Book
 import com.example.unitbooks.util.getBookPrice
 
 class HotDealsAdapter : Adapter<HotDealsAdapter.HotDealsViewHolder>() {
 
-    private val bookList: MutableList<BookItem> = mutableListOf()
+    private val bookList: MutableList<Book> = mutableListOf()
     private lateinit var clickListener: ClickListener
 
     inner class HotDealsViewHolder(val binding: HotDealsItemBinding, clickListener: ClickListener) :
@@ -31,15 +29,17 @@ class HotDealsAdapter : Adapter<HotDealsAdapter.HotDealsViewHolder>() {
             }
         }
 
-        fun bind(book: BookItem) {
-            val volumeInfo = book.volumeInfo
-            binding.tvBookTitle.text = volumeInfo.title
+        fun bind(item: Book) {
+            binding.tvBookTitle.text = item.title
             binding.tvBookPrice.text = getBookPrice()
 
-            volumeInfo.imageLinks?.thumbnail?.let {
-                Glide.with(itemView).load(it).into(binding.ivImage)
-            } ?: Glide.with(itemView).load(R.drawable.r).into(binding.ivImage)
-        }
+            item.thumbnail.let {
+                if (it.isBlank()) {
+                    Glide.with(itemView).load(R.drawable.r).into(binding.ivImage)
+                } else {
+                    Glide.with(itemView).load(it).into(binding.ivImage)
+                }
+            }        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HotDealsViewHolder {
@@ -56,19 +56,19 @@ class HotDealsAdapter : Adapter<HotDealsAdapter.HotDealsViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: HotDealsViewHolder, position: Int) {
-        Log.i("onBindViewHolder", "onBindViewHolder: ${bookList[position].volumeInfo.title}")
+        Log.i("onBindViewHolder", "onBindViewHolder: ${bookList[position].title}")
         holder.bind(bookList[position])
     }
 
     interface ClickListener {
-        fun onItemClick(position: Int, book: BookItem)
+        fun onItemClick(position: Int, book: Book)
     }
 
     fun setOnClickListener(listener: ClickListener) {
-        this.clickListener = listener
+        clickListener = listener
     }
 
-    fun append(newItems: List<BookItem>) {
+    fun append(newItems: List<Book>) {
         bookList.addAll(newItems)
         notifyDataSetChanged()
     }
