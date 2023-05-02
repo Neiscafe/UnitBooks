@@ -8,17 +8,17 @@ class NetworkBookMapper : Mapper<BookEntity, Book> {
         with(entity) {
             return Book(
                 id = id,
-                title = volumeInfo.title?:"",
-                subtitle = volumeInfo.subtitle?:"",
-//                authors = volumeInfo.authors,
-                publisher = volumeInfo.publisher?:"",
-                publishedData = volumeInfo.publishedData?:"",
-                description = volumeInfo.description?:"",
-                pageCount = volumeInfo.pageCount?:0,
-                maturityRating = volumeInfo.maturityRating?:"",
-                smallThumbnail = volumeInfo.imageLinks?.smallThumbnail?:"",
-                thumbnail = volumeInfo.imageLinks?.thumbnail?:"",
-                language = volumeInfo.language?:""
+                title = volumeInfo.title ?: "",
+                subtitle = volumeInfo.subtitle ?: "",
+                authors = volumeInfo.authors?: emptyList(),
+                publisher = volumeInfo.publisher ?: "",
+                publishedData = volumeInfo.publishedData ?: "",
+                description = volumeInfo.description ?: "",
+                pageCount = volumeInfo.pageCount ?: 0,
+                maturityRating = volumeInfo.maturityRating ?: "",
+                smallThumbnail = volumeInfo.imageLinks?.smallThumbnail ?: "",
+                thumbnail = volumeInfo.imageLinks?.thumbnail ?: "",
+                language = volumeInfo.language ?: ""
             )
         }
     }
@@ -28,8 +28,6 @@ class NetworkBookMapper : Mapper<BookEntity, Book> {
     }
 
     fun fromEntityList(initial: List<BookEntity>): List<Book> {
-        return initial.map {mapFromEntity(it)}
+        return initial.map { mapFromEntity(it) }
     }
-
-
 }

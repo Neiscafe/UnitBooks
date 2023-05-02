@@ -15,16 +15,13 @@ class CatalogPagingSource(private val remote: BookService) : PagingSource<Int, B
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Book> {
 
-        Log.i(TAG, "load: entrou no load")
         val firstElementIndex = params.key ?: 0
         return try {
             val bookResponse = remote.getVolumes(firstElementIndex).items
             val mappedData = NetworkBookMapper().fromEntityList(bookResponse)
             val nextKey = if (mappedData.isEmpty()) {
-                Log.i(TAG, "load: falha no if")
                 null
             } else {
-                Log.i(TAG, "load: sucesso no if")
                 firstElementIndex + 40
             }
 
@@ -32,7 +29,6 @@ class CatalogPagingSource(private val remote: BookService) : PagingSource<Int, B
                 data = mappedData, prevKey = null, nextKey = nextKey
             )
         } catch (e: Exception) {
-            Log.i(TAG, "load: falha no try catch ${e.message}")
             LoadResult.Error(e)
         }
     }

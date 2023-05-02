@@ -34,7 +34,7 @@ data class Book(
     @PrimaryKey val id: String,
     val title: String,
     val subtitle: String,
-//    val authors: List<String>,
+    val authors: List<String>,
     val publisher: String,
     val publishedData: String,
     val description: String,

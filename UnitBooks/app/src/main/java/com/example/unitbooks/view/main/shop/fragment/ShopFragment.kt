@@ -1,10 +1,11 @@
 package com.example.unitbooks.view.main.shop.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -45,7 +46,6 @@ class ShopFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewModelObserver()
-
     }
 
     override fun onResume() {
@@ -56,15 +56,45 @@ class ShopFragment : Fragment() {
     private fun setupViewModelObserver() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                hotDealsData()
-                catalogData()
+                viewModel.isDataLoaded.observe(viewLifecycleOwner) {
+                    checkLoadedData(it)
+                }
             }
+        }
+    }
+
+    private fun checkLoadedData(it: Boolean?) {
+        lifecycleScope.launch {
+            if (it == true) {
+                Log.i("ShopFragment", "True")
+                hotDealsDb()
+                catalogDataDb()
+            } else {
+                Log.i("ShopFragment", "False")
+                catalogData()
+                hotDealsData()
+            }
+        }
+    }
+
+    private fun catalogDataDb() {
+
+    }
+
+    private suspend fun hotDealsDb() {
+        viewModel.getHotDealsDb().observe(viewLifecycleOwner) {
+            Log.i("ShopFragment", "hotDealsData: Getting data from database")
+            hotDealsAdapter.append(it)
         }
     }
 
     private suspend fun hotDealsData() {
         viewModel.getHotDeals().observe(viewLifecycleOwner) {
-            hotDealsAdapter.append(it)
+            lifecycleScope.launch {
+                Log.i("ShopFragment", "hotDealsData: Getting data from api")
+                hotDealsAdapter.append(it)
+                viewModel.insertBooks(it)
+            }
         }
     }
 
@@ -87,17 +117,16 @@ class ShopFragment : Fragment() {
         rvCatalog.adapter = catalogAdapter
 
         rvCatalog.layoutManager = GridLayoutManager(requireContext(), 3)
-        rvHotDeals.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        rvHotDeals.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
         hotDealsAdapter.setOnClickListener(object : HotDealsAdapter.ClickListener {
             override fun onItemClick(position: Int, book: Book) {
-                Toast.makeText(requireContext(), "Clique ativado", Toast.LENGTH_SHORT).show()
             }
         })
 
         catalogAdapter.setClickListener(object : CatalogAdapter.ClickListener {
             override fun onItemClick(book: Book, position: Int) {
-                Toast.makeText(context, "Clique ativado", Toast.LENGTH_SHORT).show()
             }
         })
         searchViewCallbacks()
@@ -114,6 +143,7 @@ class ShopFragment : Fragment() {
                 } ?: return false
                 return true
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }

@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.UnitBooks" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/green_tertiary</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -46,5 +46,10 @@
         <item name="android:backgroundTint">@color/yellow_primary</item>
         <item name="android:paddingTop">7.5dp</item>
         <item name="android:paddingBottom">7.5dp</item>
+    </style>
+    <style name="ProductStyle">
+        <item name="android:maxLines">2</item>
+        <item name="android:minLines">1</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

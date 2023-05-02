@@ -1,14 +1,14 @@
 package com.example.unitbooks.database
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
 import com.example.unitbooks.model.Book
+import com.example.unitbooks.util.ListStringTypeConverter
 
 @Database(
     entities = [Book::class], version = 1, exportSchema = false
 )
+@TypeConverters(ListStringTypeConverter::class)
 abstract class RoomDataBase : RoomDatabase() {
     abstract val bookDao: BookDao
 

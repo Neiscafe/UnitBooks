@@ -39,7 +39,8 @@ class HotDealsAdapter : Adapter<HotDealsAdapter.HotDealsViewHolder>() {
                 } else {
                     Glide.with(itemView).load(it).into(binding.ivImage)
                 }
-            }        }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HotDealsViewHolder {
@@ -51,12 +52,10 @@ class HotDealsAdapter : Adapter<HotDealsAdapter.HotDealsViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-
         return bookList.size
     }
 
     override fun onBindViewHolder(holder: HotDealsViewHolder, position: Int) {
-        Log.i("onBindViewHolder", "onBindViewHolder: ${bookList[position].title}")
         holder.bind(bookList[position])
     }
 

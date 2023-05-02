@@ -1,5 +1,6 @@
 package com.example.unitbooks.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.Pager
@@ -37,8 +38,8 @@ class RepositoryImpl(
         return liveData
     }
 
-    override suspend fun insertBooksDb() {
-        TODO("Not yet implemented")
+    override suspend fun insertBooksDb(books: List<Book>) {
+        bookDao.insertBookList(books)
     }
 
     override suspend fun updateBooksDb() {
@@ -49,8 +50,16 @@ class RepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override fun getAllBooksDb() {
-        TODO("Not yet implemented")
+    override suspend fun getAllBooksDb(): LiveData<List<Book>> {
+        val liveData = MutableLiveData<List<Book>>()
+        liveData.value = bookDao.getAllBooks()
+        return liveData
+    }
+
+    override suspend fun getHotDealsDb(): LiveData<List<Book>> {
+        val liveData = MutableLiveData<List<Book>>()
+        liveData.value = bookDao.getHotDealsDb()
+        return liveData
     }
 }
 
@@ -60,9 +69,10 @@ interface Repository {
 
     suspend fun getHotDealsApi(): LiveData<List<Book>>
 
-    suspend fun insertBooksDb()
+    suspend fun insertBooksDb(books: List<Book>)
 
     suspend fun updateBooksDb()
     suspend fun deleteBooksdb()
-    fun getAllBooksDb()
+    suspend fun getAllBooksDb(): LiveData<List<Book>>
+    suspend fun getHotDealsDb(): LiveData<List<Book>>
 }
