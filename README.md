@@ -1,4 +1,7 @@
 # UnitBooks
+
+This repository is currently paused and not finished due to other priorities in my life right now, but i have the intention to finish it.
+
  App for fictional e-commerce using the Google Books API.
  This app was intended to be a study case of some libraries, so the design and concept stuff is pretty rough. 
  
